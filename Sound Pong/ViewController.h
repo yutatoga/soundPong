@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-@interface ViewController : UIViewController<AVAudioRecorderDelegate>{
+@interface ViewController : UIViewController<AVAudioRecorderDelegate, AVAudioSessionDelegate, AVAudioPlayerDelegate>{
     AVAudioRecorder *recorder;
     IBOutlet UIProgressView *peakPowerForChannelProgress;
     IBOutlet UIProgressView *averagePowerForChannelProgress;
@@ -24,5 +24,10 @@
     int speedX;
     int speedY;
     int counter;
+    
+    //audio session
+    AVAudioPlayer *player;
+    AVAudioSession *audioSession;
+    int notMoveTimeAfterHit;
 }
 @end

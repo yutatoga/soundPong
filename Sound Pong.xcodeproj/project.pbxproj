@@ -21,6 +21,9 @@
 		8D34CD2715CC93E300031B31 /* pong.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CD2515CC93E200031B31 /* pong.wav */; };
 		8D34CD2815CC93E300031B31 /* pow.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CD2615CC93E200031B31 /* pow.wav */; };
 		8D34CD2E15CC96E400031B31 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D34CD2D15CC96E300031B31 /* AVFoundation.framework */; };
+		8D34CD3015CC99C900031B31 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D34CD2F15CC99C900031B31 /* AudioToolbox.framework */; };
+		8D34CD3215CC9A5400031B31 /* Pop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CD3115CC9A5400031B31 /* Pop.aiff */; };
+		8D34CD3D15CD9B0000031B31 /* wall.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CD3C15CD9B0000031B31 /* wall.wav */; };
 		8DF1CA8B15CBE695002EC578 /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DF1CA8A15CBE695002EC578 /* block.png */; };
 		8DF1CA8D15CBE77F002EC578 /* ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DF1CA8C15CBE77F002EC578 /* ball.png */; };
 /* End PBXBuildFile section */
@@ -45,6 +48,9 @@
 		8D34CD2515CC93E200031B31 /* pong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pong.wav; sourceTree = "<group>"; };
 		8D34CD2615CC93E200031B31 /* pow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pow.wav; sourceTree = "<group>"; };
 		8D34CD2D15CC96E300031B31 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		8D34CD2F15CC99C900031B31 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		8D34CD3115CC9A5400031B31 /* Pop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Pop.aiff; sourceTree = "<group>"; };
+		8D34CD3C15CD9B0000031B31 /* wall.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = wall.wav; sourceTree = "<group>"; };
 		8DF1CA8A15CBE695002EC578 /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
 		8DF1CA8C15CBE77F002EC578 /* ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ball.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D34CD3015CC99C900031B31 /* AudioToolbox.framework in Frameworks */,
 				8D34CD2E15CC96E400031B31 /* AVFoundation.framework in Frameworks */,
 				8D2DE95E15CBCB2000C771A0 /* UIKit.framework in Frameworks */,
 				8D2DE96015CBCB2000C771A0 /* Foundation.framework in Frameworks */,
@@ -84,6 +91,7 @@
 		8D2DE95C15CBCB2000C771A0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8D34CD2F15CC99C900031B31 /* AudioToolbox.framework */,
 				8D34CD2D15CC96E300031B31 /* AVFoundation.framework */,
 				8D2DE95D15CBCB2000C771A0 /* UIKit.framework */,
 				8D2DE95F15CBCB2000C771A0 /* Foundation.framework */,
@@ -108,6 +116,8 @@
 		8D2DE96415CBCB2000C771A0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8D34CD3C15CD9B0000031B31 /* wall.wav */,
+				8D34CD3115CC9A5400031B31 /* Pop.aiff */,
 				8D34CD2515CC93E200031B31 /* pong.wav */,
 				8D34CD2615CC93E200031B31 /* pow.wav */,
 				8D34CD2115CC93BE00031B31 /* 0.caf */,
@@ -183,6 +193,8 @@
 				8D34CD2415CC93BE00031B31 /* 2.caf in Resources */,
 				8D34CD2715CC93E300031B31 /* pong.wav in Resources */,
 				8D34CD2815CC93E300031B31 /* pow.wav in Resources */,
+				8D34CD3215CC9A5400031B31 /* Pop.aiff in Resources */,
+				8D34CD3D15CD9B0000031B31 /* wall.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
