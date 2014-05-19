@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import <QuartzCore/QuartzCore.h>
+#import <CoreVideo/CoreVideo.h>
+#import <CoreMedia/CoreMedia.h>
+#import "ScreenCaptureView.h"
 @interface ViewController : UIViewController<AVAudioRecorderDelegate, AVAudioSessionDelegate, AVAudioPlayerDelegate>{
+    //for first view
     AVAudioRecorder *recorder;
     IBOutlet UIProgressView *peakPowerForChannelProgress;
     IBOutlet UIProgressView *averagePowerForChannelProgress;
@@ -29,5 +34,13 @@
     AVAudioPlayer *player;
     AVAudioSession *audioSession;
     int notMoveTimeAfterHit;
+    
+    
+    //for second view
+    IBOutlet UIView *secondView;
+    
+    //capture
+    IBOutlet ScreenCaptureView* captureView;
 }
+
 @end

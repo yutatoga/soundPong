@@ -9,10 +9,13 @@
 #import "AppDelegate.h"
 
 @implementation AppDelegate
-
+@synthesize hitCounter;
+@synthesize writingMovieDone;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    hitCounter = [[NSNumber alloc] initWithInt:0];
+    writingMovieDone = false;
     return YES;
 }
 							

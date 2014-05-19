@@ -2,6 +2,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "AppDelegate.h"
 
 @interface ScreenCaptureView(Private)
 - (void) writeVideoFrameAtTime:(CMTime)time;
@@ -127,16 +128,13 @@
 }
 
 - (void) cleanupWriter {
-	[avAdaptor release];
+
 	avAdaptor = nil;
 	
-	[videoWriterInput release];
 	videoWriterInput = nil;
 	
-	[videoWriter release];
 	videoWriter = nil;
 	
-	[startedAt release];
 	startedAt = nil;
 	
 	if (bitmapData != NULL) {
@@ -147,7 +145,6 @@
 
 - (void)dealloc {
 	[self cleanupWriter];
-	[super dealloc];
 }
 
 - (NSURL*) tempFileURL {
@@ -161,8 +158,7 @@
 		}
 	}
 	
-	[outputPath release];
-	return [outputURL autorelease];
+	return outputURL;
 }
 
 -(BOOL) setUpWriter {
@@ -182,14 +178,14 @@
 								   videoCompressionProps, AVVideoCompressionPropertiesKey,
 								   nil];
 	
-	videoWriterInput = [[AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings] retain];
+	videoWriterInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
 	
 	NSParameterAssert(videoWriterInput);
 	videoWriterInput.expectsMediaDataInRealTime = YES;
 	NSDictionary* bufferAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
 									  [NSNumber numberWithInt:kCVPixelFormatType_32ARGB], kCVPixelBufferPixelFormatTypeKey, nil];
 	
-	avAdaptor = [[AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:videoWriterInput sourcePixelBufferAttributes:bufferAttributes] retain];
+	avAdaptor = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:videoWriterInput sourcePixelBufferAttributes:bufferAttributes];
 	
 	//add input
 	[videoWriter addInput:videoWriterInput];
@@ -199,9 +195,7 @@
 	return YES;
 }
 
-- (void) completeRecordingSession {
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-	
+- (void) completeRecordingSession {	
 	[videoWriterInput markAsFinished];
 	
 	// Wait for the video
@@ -228,12 +222,11 @@
 		if ([delegateObj respondsToSelector:@selector(recordingFinished:)]) {
 			[delegateObj performSelectorOnMainThread:@selector(recordingFinished:) withObject:(success ? outputURL : nil) waitUntilDone:YES];
 		}
-		
-		[outputPath release];
-		[outputURL release];
+        
+        AppDelegate *myAppDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+        myAppDelegate.writingMovieDone = true;//by OtO
+
 	}
-	
-	[pool drain];
 }
 
 - (bool) startRecording {
@@ -241,7 +234,7 @@
 	@synchronized(self) {
 		if (! _recording) {
 			result = [self setUpWriter];
-			startedAt = [[NSDate date] retain];
+			startedAt = [NSDate date];
 			_recording = true;
 		}
 	}
@@ -264,7 +257,7 @@
 	}
 	else {
 		@synchronized (self) {
-			UIImage* newFrame = [self.currentScreen retain];
+			UIImage* newFrame = self.currentScreen;
 			CVPixelBufferRef pixelBuffer = NULL;
 			CGImageRef cgImage = CGImageCreateCopy([newFrame CGImage]);
 			CFDataRef image = CGDataProviderCopyData(CGImageGetDataProvider(cgImage));
@@ -286,7 +279,6 @@
 			}
 			
 			//clean up
-			[newFrame release];
 			CVPixelBufferUnlockBaseAddress( pixelBuffer, 0 );
 			CVPixelBufferRelease( pixelBuffer );
 			CFRelease(image);
@@ -294,7 +286,6 @@
 		}
 		
 	}
-	
 }
 
 @end

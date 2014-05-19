@@ -7,22 +7,31 @@
 //
 
 #import "ViewController.h"
-
+#import "AppDelegate.h"
+#import "SecondViewController.h"
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
 
+-(void)viewWillAppear:(BOOL)animated{
+    [recorder record];
+    //capture
+    [captureView performSelector:@selector(startRecording) withObject:nil afterDelay:0.0];
+
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    
-    
-    
     //by OtO
+		CGRect blockImageViewFrame = blockImageView.frame;
+		blockImageViewFrame.origin = CGPointMake(blockImageView.frame.origin.x, [UIScreen mainScreen].bounds.size.height*0.8);
+		blockImageView.frame = blockImageViewFrame;
+		
     blockImageView.image = [UIImage imageNamed:@"block.png"];
     ballImageView.image = [UIImage imageNamed:@"ball.png"];
     isThereBall = false;
@@ -34,10 +43,16 @@
         //speedX = 5;//for test
         speedY = arc4random()%21-10;
         //speedY = 1;//for test
-    } while (speedX == 0 || speedY == 0);
+    } while (ABS(speedX) < 2 || ABS(speedY) < 3);
     NSLog(@"speedX:%d speedY:%d", speedX, speedY);
     counter = 0;
-    counterLabel.text = @"0";
+		counterLabel.textAlignment = UITextAlignmentLeft;
+		
+		CGRect counterLabelFrame = counterLabel.frame;
+		counterLabelFrame.origin = CGPointMake([UIScreen mainScreen].bounds.size.width/2.0, [UIScreen mainScreen].bounds.size.height/10.0);
+		counterLabel.frame = counterLabelFrame;
+    
+		counterLabel.text = @"0";
     checkCircle.image = [UIImage imageNamed:@"redcircle.png"];
     checkCircle.hidden = true;
     oneTouchWall = true;
@@ -58,7 +73,15 @@
     player.delegate = self;
     
     //recorder
-    NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
+    //NSURL *url = [NSURL fileURLWithPath:@"/dev/null"];
+    
+    
+    
+    NSString *docFolder = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    NSString *soundFilePath = [NSString stringWithFormat:@"%@/sound.caf",docFolder];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundFilePath];
+    
+    
   	NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
                               [NSNumber numberWithFloat: 44100.0],                 AVSampleRateKey,
                               [NSNumber numberWithInt: kAudioFormatAppleLossless], AVFormatIDKey,
@@ -66,29 +89,33 @@
                               [NSNumber numberWithInt: AVAudioQualityMax],         AVEncoderAudioQualityKey,
                               nil];
   	NSError *error;
-  	recorder = [[AVAudioRecorder alloc] initWithURL:url settings:settings error:&error];
+  	recorder = [[AVAudioRecorder alloc] initWithURL:soundURL settings:settings error:&error];
   	if (recorder) {
   		[recorder prepareToRecord];
   		recorder.meteringEnabled = YES;
         recorder.delegate = self;
-  		[recorder record];
+  		//[recorder record];
 		levelTimer = [NSTimer scheduledTimerWithTimeInterval: 0.03 target: self selector: @selector(levelTimerCallback:) userInfo: nil repeats: YES];
   	} else
   		NSLog(@"error %@", [error description]);
+    
+	
 }
 -(void) audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag
 {
     NSLog(@"Recording success:%@",flag ? @"YES" : @"NO");
 }
 - (void)levelTimerCallback:(NSTimer *)timer {
-    
+//		NSLog(@"recorder: %f", [recorder peakPowerForChannel:0]);
     //about ball image
     if (isThereBall == false) {
-        if ([recorder peakPowerForChannel:0] == 0.000000) {
+//        if ([recorder peakPowerForChannel:0] == 0.000000) {
+						if (true) {
             isThereBall = true;
             ballImageView.hidden = false;
             firstGuideMessageLabel.hidden = true;
-            checkCircle.hidden = false;
+//            checkCircle.hidden = false;
+						checkCircle.hidden = true;
             ballImageView.center = CGPointMake(160, ballImageView.frame.size.height/2);
         }
     }else{
@@ -109,7 +136,12 @@
             isThereBall = false;
             ballImageView.hidden = true;
             checkCircle.hidden = true;
+            AppDelegate *myAppDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+            myAppDelegate.hitCounter = [NSNumber numberWithInt:counter];
             counter = 0;
+            [recorder stop];
+            [captureView performSelector:@selector(stopRecording) withObject:nil afterDelay:0.0];
+            [self viewChange];
             counterLabel.text = [NSString stringWithFormat:@"%d", counter];
         }
         //counterLabel.center = ballImageView.center;
@@ -155,7 +187,7 @@
 	//NSLog(@"Peak input: %f Average input: %f ", [recorder peakPowerForChannel:0], [recorder averagePowerForChannel:0]);
     peakPowerForChannelProgress.progress = (50+[recorder peakPowerForChannel:0])/50;
     averagePowerForChannelProgress.progress = (50+[recorder averagePowerForChannel:0])/50;
-    blockImageView.center = CGPointMake((50+[recorder averagePowerForChannel:0])/50*320, blockImageView.center.y);
+    blockImageView.center = CGPointMake((50+[recorder averagePowerForChannel:0])/50*[UIScreen mainScreen].bounds.size.width, blockImageView.center.y);
     }else{
         notMoveTimeAfterHit--;
     }
@@ -223,6 +255,15 @@ float closestVal (float val, float min, float max){
         return max;
     }
 };
+
+-(IBAction)viewChange{
+    NSLog(@"change");
+    UIViewController *mySecondViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SecondViewController"];
+    //mySecondViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:mySecondViewController animated:NO completion:nil];
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {
